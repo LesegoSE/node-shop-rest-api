@@ -1,0 +1,19 @@
+{
+  "name": "shop-rest-api",
+  "version": "1.0.0",
+  "description": "A Node.js RESTful API for a shop project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "restful",
+    "api"
+  ],
+  "author": "Lesego Seikali",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
