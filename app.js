@@ -5,18 +5,20 @@ const morgan = require('morgan');
 const productRouter = require('./api/routes/product');
 const orderRouter = require('./api/routes/orders');
 
-app.use(morgan('dev'));
+app.use(morgan('dev')); //Handles request logging
 
 //Handles  requests to api
 app.use('/products', productRouter);
 app.use('/orders', orderRouter);
 
+//Handles all errors that occure with the api's
 app.use((req,res,next) => {
     const error = new Error('Not found');
     error.status = 404;
     next(error);
 });
 
+//Handles all errors that occure at any instance
 app.use((error,req,res,next) => {
     res.status(error.status || 500)
     res.json({
