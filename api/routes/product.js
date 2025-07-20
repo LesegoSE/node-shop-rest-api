@@ -24,9 +24,9 @@ router.get('/:productId', (req, res, next) => {
         });
     } else {
         res.status(200).json({
-            message: 'No id match found for id:',
+            message: 'No id match found',
             id: id
         });
     }
-})
+});
 module.exports = router;
