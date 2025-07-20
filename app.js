@@ -1,11 +1,14 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 const productRouter = require('./api/routes/product');
 const orderRouter = require('./api/routes/orders');
 
 app.use(morgan('dev')); //Handles request logging
+app.use(bodyParser.urlencoded({extended: false})); //Handles body data
+app.use(bodyParser.json()); //Extracts json data in a easy to read format
 
 //Handles  requests to api
 app.use('/products', productRouter);
