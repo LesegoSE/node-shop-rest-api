@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const productRouter = require('./api/routes/product');
+const productRouter = require('./api/routes/products');
 const orderRouter = require('./api/routes/orders');
 
 /*mongoose.connect('mongodb+srv://admin:' + process.env.MONGO_ATLAS_NODE_SHOP_PW + '@node-shop.nqvytnp.mongodb.net/?retryWrites=true&w=majority&appName=node-shop',
