@@ -1,5 +1,4 @@
 const express = require('express');
-const { route } = require('./product');
 const router = express.Router();
 
 //Handling requests
