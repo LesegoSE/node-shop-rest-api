@@ -15,6 +15,7 @@ const orderRouter = require('./api/routes/orders');
 */
 
 mongoose.connect('mongodb+srv://admin:' + process.env.MONGO_ATLAS_NODE_SHOP_PW + '@node-shop.nqvytnp.mongodb.net/?retryWrites=true&w=majority&appName=node-shop');
+mongoose.Promise = global.Promise;
 
 app.use(morgan('dev')); //Handles request logging
 app.use(bodyParser.urlencoded({ extended: false })); //Handles body data
