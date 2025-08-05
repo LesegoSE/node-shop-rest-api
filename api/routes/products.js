@@ -92,7 +92,7 @@ router.get('/:productId', (req, res, next) => {
         .select('_id name price')
         .exec()
         .then(doc => {
-            const response = ({
+            const response = {
                 id: id,
                 name: doc.name,
                 price: doc.price,
@@ -101,7 +101,7 @@ router.get('/:productId', (req, res, next) => {
                     description: 'returns a list of all products on the database',
                     url: 'http://localhost:3000/products/'
                 }
-            });
+            }
             if (doc) {
                 res.status(200).json(response);
             } else {
