@@ -9,71 +9,71 @@ const { request } = require('../../app');
 //Handling requests
 router.get('/', (req, res, next) => {
     Order.find()
-    .select('_id product quantity')
-    .exec()
-    .then(docs => {
-        const response = {
-            ordCount: docs.length,
-            orders: docs.map(doc => {
-                return {
-                    _id: doc.id,
-                    product: doc.productId,
-                    quantity: doc.quantity,
-                    request: {
-                        type: 'Get',
-                        description: 'returns detailed information about this order',
-                        url: 'http://localhost:3000/orders/'+ doc._id
+        .select('_id product quantity')
+        .exec()
+        .then(docs => {
+            const response = {
+                ordCount: docs.length,
+                orders: docs.map(doc => {
+                    return {
+                        _id: doc.id,
+                        product: doc.productId,
+                        quantity: doc.quantity,
+                        request: {
+                            type: 'Get',
+                            description: 'returns detailed information about this order',
+                            url: 'http://localhost:3000/orders/' + doc._id
+                        }
                     }
-                }
-            })
-        }
-        if (docs.length > 0) {
-            res.status(200).json(response)    
-        } else {
-            res.status(200).json({
-                message: 'NO RECORDS TO SHOW'
-            })
-        }
-    })
-    .catch( err => {
-        console.log(err),
-        res.status(500).json({
-           error: err 
+                })
+            }
+            if (docs.length > 0) {
+                res.status(200).json(response)
+            } else {
+                res.status(200).json({
+                    message: 'NO RECORDS TO SHOW'
+                })
+            }
         })
-    })
+        .catch(err => {
+            console.log(err),
+                res.status(500).json({
+                    error: err
+                })
+        })
 });
 
 router.get('/:orderId', (req, res, next) => {
     const id = req.params.orderId
 
     Order.findById(id)
-    .select('_id product quantity')
-    .exec()
-    .then(doc => {
-        const response = {
-            id: id,
-            product: doc.productId,
-            quantity: doc.quantity,
-            request: {
-                type: 'Get',
-                description: 'returns a list of all orders in the database',
-                url: 'http://localhost:3000/orders'
+        .select('_id product quantity')
+        .exec()
+        .then(doc => {
+            const response = {
+                id: id,
+                product: doc.productId,
+                quantity: doc.quantity,
+                request: {
+                    type: 'Get',
+                    description: 'returns a list of all orders in the database',
+                    url: 'http://localhost:3000/orders'
+                }
             }
-        }
-        if (doc) {
-            res.status(200).json(response);
-        } else {
-            res.status(404).json({
-                message: 'No valid ID record found'
-            });
-        }
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err
+            if (doc) {
+                res.status(200).json(response);
+            } else {
+                res.status(404).json({
+                    message: 'No valid ID record found'
+                });
+            }
         })
-    })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        })
 });
 
 router.post('/', (req, res, next) => {
@@ -108,16 +108,32 @@ router.post('/', (req, res, next) => {
             });
 
         });
-   
+
 });
 
 router.delete('/:orderId', (req, res, next) => {
     const id = req.params.orderId
 
-    res.status(200).json({
-        message: 'Order has been succesfully deleted',
-        id: id
-    });
+    Order.deleteOne({ _id: id })
+        .exec()
+        .then(result => {
+            const response = {
+                message: id + ' record has been successfully deleted',
+                request: {
+                    type: 'Post',
+                    description: 'allows you to add a new order',
+                    url: 'http://localhost:3000/orders'
+                }
+            }
+            res.status(200).json(result);
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(200).json({
+                error: err
+            });
+        })
+
 });
 
 module.exports = router;
