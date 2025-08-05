@@ -3,6 +3,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 const Order = require('../models/order');
+const { request } = require('../../app');
+
 
 //Handling requests
 router.get('/', (req, res, next) => {
@@ -32,7 +34,6 @@ router.get('/', (req, res, next) => {
                 message: 'NO RECORDS TO SHOW'
             })
         }
-        
     })
     .catch( err => {
         console.log(err),
@@ -45,17 +46,34 @@ router.get('/', (req, res, next) => {
 router.get('/:orderId', (req, res, next) => {
     const id = req.params.orderId
 
-    if (id === '20') {
-        res.status(200).json({
-            message: 'Handling GET request for order id 20',
-            id: id
-        });
-    } else {
-        res.status(200).json({
-            message: 'No id match found',
-            id: id
-        });
-    }
+    Order.findById(id)
+    .select('_id product quantity')
+    .exec()
+    .then(doc => {
+        const response = {
+            id: id,
+            product: doc.productId,
+            quantity: doc.quantity,
+            request: {
+                type: 'Get',
+                description: 'returns a list of all orders in the database',
+                url: 'http://localhost:3000/orders'
+            }
+        }
+        if (doc) {
+            res.status(200).json(response);
+        } else {
+            res.status(404).json({
+                message: 'No valid ID record found'
+            });
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    })
 });
 
 router.post('/', (req, res, next) => {
