@@ -138,7 +138,7 @@ router.delete('/:productId', (req, res, next) => {
                 message: id + ' record has been successfuly deleted',
                 request: {
                     type: 'POST',
-                    description: 'returns a list of all products in the database',
+                    description: 'allows you to add a new product',
                     url: 'http://localhost:3000/products',
                     data: {
                         name: 'String',
