@@ -6,9 +6,40 @@ const Order = require('../models/order');
 
 //Handling requests
 router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling GET requests to /orders'
-    });
+    Order.find()
+    .select('_id product quantity')
+    .exec()
+    .then(docs => {
+        const response = {
+            ordCount: docs.length,
+            orders: docs.map(doc => {
+                return {
+                    _id: doc.id,
+                    product: doc.productId,
+                    quantity: doc.quantity,
+                    request: {
+                        type: 'Get',
+                        description: 'returns detailed information about this order',
+                        url: 'http://localhost:3000/orders/'+ doc._id
+                    }
+                }
+            })
+        }
+        if (docs.length > 0) {
+            res.status(200).json(response)    
+        } else {
+            res.status(200).json({
+                message: 'NO RECORDS TO SHOW'
+            })
+        }
+        
+    })
+    .catch( err => {
+        console.log(err),
+        res.status(500).json({
+           error: err 
+        })
+    })
 });
 
 router.get('/:orderId', (req, res, next) => {
@@ -38,7 +69,19 @@ router.post('/', (req, res, next) => {
         //.exec() //turns it to a true promise
         .then(result => {
             console.log(result);
-            res.status(201).json(result);
+            res.status(201).json({
+                message: 'Successfully created an order',
+                createdOrder: {
+                    id: req._id,
+                    product: req.productId,
+                    quantity: req.quantity,
+                    request: {
+                        type: 'Get',
+                        description: 'returns detailed information about the created order',
+                        url: 'http://localhost:3000/orders/' + result._id
+                    }
+                }
+            });
         })
         .catch(err => {
             console.log(err);
