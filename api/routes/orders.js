@@ -10,6 +10,7 @@ const { request } = require('../../app');
 router.get('/', (req, res, next) => {
     Order.find()
         .select('_id product quantity')
+        .populate('product', 'name')
         .exec()
         .then(docs => {
             const response = {
@@ -17,14 +18,14 @@ router.get('/', (req, res, next) => {
                 orders: docs.map(doc => {
                     return {
                         _id: doc.id,
-                        product: doc.productId,
+                        product: doc.product,
                         quantity: doc.quantity,
                         request: {
                             type: 'Get',
                             description: 'returns detailed information about this order',
                             url: 'http://localhost:3000/orders/' + doc._id
                         }
-                    }
+                    };
                 })
             }
             if (docs.length > 0) {
@@ -48,16 +49,17 @@ router.get('/:orderId', (req, res, next) => {
 
     Order.findById(id)
         .select('_id product quantity')
+        .populate('product')
         .exec()
         .then(doc => {
             if (!doc) {
-                      return res.status(404).json({
+                return res.status(404).json({
                     message: 'Order not found'
-                });          
+                });
             }
             res.status(200).json({
                 id: id,
-                product: doc.productId,
+                product: doc.product,
                 quantity: doc.quantity,
                 request: {
                     type: 'Get',
@@ -121,7 +123,7 @@ router.delete('/:orderId', (req, res, next) => {
                     type: 'Post',
                     description: 'allows you to add a new order',
                     url: 'http://localhost:3000/orders',
-                    body: {productId: 'ID', quantity: 'Number'}
+                    body: { productId: 'ID', quantity: 'Number' }
                 }
             }
             res.status(200).json(response);
