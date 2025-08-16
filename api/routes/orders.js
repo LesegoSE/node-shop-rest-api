@@ -50,7 +50,12 @@ router.get('/:orderId', (req, res, next) => {
         .select('_id product quantity')
         .exec()
         .then(doc => {
-            const response = {
+            if (!doc) {
+                      return res.status(404).json({
+                    message: 'Order not found'
+                });          
+            }
+            res.status(200).json({
                 id: id,
                 product: doc.productId,
                 quantity: doc.quantity,
@@ -59,14 +64,7 @@ router.get('/:orderId', (req, res, next) => {
                     description: 'returns a list of all orders in the database',
                     url: 'http://localhost:3000/orders'
                 }
-            }
-            if (doc) {
-                res.status(200).json(response);
-            } else {
-                res.status(404).json({
-                    message: 'No valid ID record found'
-                });
-            }
+            });
         })
         .catch(err => {
             console.log(err);
@@ -122,10 +120,11 @@ router.delete('/:orderId', (req, res, next) => {
                 request: {
                     type: 'Post',
                     description: 'allows you to add a new order',
-                    url: 'http://localhost:3000/orders'
+                    url: 'http://localhost:3000/orders',
+                    body: {productId: 'ID', quantity: 'Number'}
                 }
             }
-            res.status(200).json(result);
+            res.status(200).json(response);
         })
         .catch(err => {
             console.log(err)
