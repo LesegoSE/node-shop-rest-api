@@ -18,6 +18,7 @@ mongoose.connect('mongodb+srv://admin:' + process.env.MONGO_ATLAS_NODE_SHOP_PW +
 mongoose.Promise = global.Promise;
 
 app.use(morgan('dev')); //Handles request logging
+app.use('/uploads',express.static('uploads')) //sets uploads folder to be publicly accessible
 app.use(bodyParser.urlencoded({ extended: false })); //Handles body data
 app.use(bodyParser.json()); //Extracts json data in a easy to read format
 
