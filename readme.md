@@ -11,6 +11,7 @@ The API is designed to be stateless, scalable, and easy to integrate with fronte
 - CRUD operations for products
 - CRUD operations for orders
 - Image upload support (using Multer)
+- User creation
 - MongoDB integration (via Mongoose)
 - Error handling and validation
 - CORS support
@@ -21,6 +22,7 @@ The API is designed to be stateless, scalable, and easy to integrate with fronte
 - Express
 - MongoDB & Mongoose
 - Multer (file uploads)
+- Bcrypt (password encryption)
 
 ## Getting Started
 
@@ -74,6 +76,11 @@ The API will run on `http://localhost:3000`.
 - `POST /orders` - Create a new order
 - `GET /orders/:orderId` - Get order details
 - `DELETE /orders/:orderId` - Delete an order
+
+### Users
+
+- `POST /users/signup` - Create a new user
+- `DELETE /users/:userId` - Delete a existing user
 
 ## Usage
 
