@@ -1,5 +1,0 @@
-{
-    "env": {
-        "MONGO_ATLAS_NODE_SHOP_PW" : "admin"
-    }
-}
